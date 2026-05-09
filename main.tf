@@ -72,8 +72,13 @@ resource "azurerm_logic_app_standard" "this" {
   storage_account_name       = azurerm_storage_account.this[0].name
   storage_account_access_key = azurerm_storage_account.this[0].primary_access_key
   app_settings               = var.app_settings
+  virtual_network_subnet_id  = var.virtual_network_subnet_id
+  public_network_access      = var.public_network_access_enabled ? "Enabled" : "Disabled"
+  https_only                 = var.https_only
 
-  site_config {}
+  site_config {
+    min_tls_version = var.min_tls_version
+  }
 
   dynamic "identity" {
     for_each = var.identity_type != null ? [1] : []
@@ -85,4 +90,24 @@ resource "azurerm_logic_app_standard" "this" {
   }
 
   tags = var.tags
+}
+
+# -----------------------------------------------------------------------------
+# Diagnostic Settings
+# -----------------------------------------------------------------------------
+
+resource "azurerm_monitor_diagnostic_setting" "this" {
+  count = var.log_analytics_workspace_id != null ? 1 : 0
+
+  name                       = var.diagnostic_setting_name != null ? var.diagnostic_setting_name : "${var.name}-diag"
+  target_resource_id         = local.is_consumption ? azurerm_logic_app_workflow.this[0].id : azurerm_logic_app_standard.this[0].id
+  log_analytics_workspace_id = var.log_analytics_workspace_id
+
+  enabled_log {
+    category_group = "allLogs"
+  }
+
+  enabled_metric {
+    category = "AllMetrics"
+  }
 }

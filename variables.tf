@@ -48,6 +48,30 @@ variable "identity_type" {
 
 # Standard-specific
 
+variable "virtual_network_subnet_id" {
+  type        = string
+  description = "The subnet ID for VNet integration. Only used when kind is 'standard'."
+  default     = null
+}
+
+variable "public_network_access_enabled" {
+  type        = bool
+  description = "Whether public network access is allowed for the Standard Logic App. Set to false to require private endpoints. Only used when kind is 'standard'."
+  default     = true
+}
+
+variable "https_only" {
+  type        = bool
+  description = "Whether the Standard Logic App requires HTTPS. Only used when kind is 'standard'."
+  default     = true
+}
+
+variable "min_tls_version" {
+  type        = string
+  description = "The minimum supported TLS version for the Standard Logic App. Only used when kind is 'standard'."
+  default     = "1.2"
+}
+
 variable "app_service_plan_id" {
   type        = string
   description = "The ID of an existing App Service Plan. If not provided, a new plan will be created. Only used when kind is 'standard'."
@@ -81,6 +105,20 @@ variable "storage_account_replication_type" {
   type        = string
   description = "The replication type for the Storage Account. Only used when kind is 'standard'."
   default     = "LRS"
+}
+
+# Diagnostic settings
+
+variable "diagnostic_setting_name" {
+  type        = string
+  description = "The name of the diagnostic setting. Required when log_analytics_workspace_id is provided."
+  default     = null
+}
+
+variable "log_analytics_workspace_id" {
+  type        = string
+  description = "The ID of the Log Analytics Workspace to send diagnostic logs to. When set, a diagnostic setting is created for the Logic App."
+  default     = null
 }
 
 # Consumption-specific

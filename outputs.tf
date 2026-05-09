@@ -73,3 +73,10 @@ output "storage_account_id" {
   description = "The ID of the Storage Account created for the Standard Logic App."
   value       = local.is_standard ? azurerm_storage_account.this[0].id : null
 }
+
+# Diagnostic Settings
+
+output "diagnostic_setting_id" {
+  description = "The ID of the diagnostic setting, if one was created."
+  value       = var.log_analytics_workspace_id != null ? azurerm_monitor_diagnostic_setting.this[0].id : null
+}
