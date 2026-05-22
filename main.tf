@@ -77,6 +77,7 @@ resource "azurerm_logic_app_standard" "this" {
   https_only                 = var.https_only
 
   site_config {
+    # Enforce a minimum TLS version for inbound connections to the Logic App.
     min_tls_version = var.min_tls_version
   }
 
