@@ -1,6 +1,6 @@
 # Azure Logic App Module
 
-Terraform module for Azure Logic Apps supporting both Consumption and Standard tiers. More stuff. It handles resource provisioning, managed identity configuration, diagnostics, and networking in a single reusable module. A single `kind` variable controls the tier, letting you switch between serverless per-execution billing and a dedicated App Service Plan without restructuring your configuration.
+Terraform module for Azure Logic Apps supporting both Consumption and Standard tiers. It handles resource provisioning, managed identity configuration, diagnostics, and networking in a single reusable module. A single `kind` variable controls the tier, letting you switch between serverless per-execution billing and a dedicated App Service Plan without restructuring your configuration.
 
 ## Usage
 
@@ -59,6 +59,22 @@ module "logic_app" {
   }
 }
 ```
+
+## Notes
+
+**Standard tier prerequisites** — `kind = "standard"` requires `storage_account_name`. The module creates a new storage account with that name; it must be globally unique, 3–24 characters, lowercase alphanumeric only.
+
+**Networking (Standard tier)** — Enterprise policy requires Standard Logic Apps to run inside a VNet with inbound traffic restricted to private endpoints. At minimum, pass `virtual_network_subnet_id` for VNet integration and set `public_network_access_enabled = false`. You are responsible for provisioning the subnet, NSG, and private endpoint outside this module.
+
+**Secrets** — Do not pass secrets as plain-text values in `app_settings`. Use Key Vault references instead:
+
+```hcl
+app_settings = {
+  MY_SECRET = "@Microsoft.KeyVault(SecretUri=https://myvault.vault.azure.net/secrets/mysecret/)"
+}
+```
+
+**Diagnostics** — Pass `log_analytics_workspace_id` and `diagnostic_setting_name` together to enable workflow diagnostic logs. Omitting either disables the diagnostic setting.
 
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
