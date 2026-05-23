@@ -1,6 +1,6 @@
 # Terraform AzureRM Logic App
 
-Terraform module for Azure Logic Apps supporting both Consumption and Standard tiers. Hi.
+Terraform module for Azure Logic Apps supporting both Consumption and Standard tiers.
 
 ## Usage
 
