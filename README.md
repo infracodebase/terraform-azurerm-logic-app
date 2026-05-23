@@ -1,6 +1,6 @@
 # Azure Logic App Module
 
-Terraform module for Azure Logic Apps supporting both Consumption and Standard tiers.
+Terraform module for Azure Logic Apps supporting both Consumption and Standard tiers. It handles resource provisioning, managed identity configuration, diagnostics, and networking in a single reusable module.
 
 ## Usage
 
